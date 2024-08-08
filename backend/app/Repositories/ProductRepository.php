@@ -50,8 +50,18 @@ class ProductRepository
      * @param  \Closure|int|null  $total
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function paginate($perPage = 15, $columns = ['*'], $pageName = 'page', $page = null)
+    public function paginate($categoryId = null, $sortBy = null, $order = 'asc', $perPage = 15, $columns = ['*'], $pageName = 'page', $page = null)
     {
-        return Product::paginate($perPage, $columns, $pageName, $page);
+        $query = Product::query();
+
+        $query->when($categoryId, function($q) use($categoryId) {
+            $q->where('category_id', $categoryId);
+        });
+
+        $query->when($sortBy, function($q) use($sortBy, $order) {
+            $q->orderBy($sortBy, $order);
+        });
+
+        return $query->paginate($perPage, $columns, $pageName, $page);
     }
 }

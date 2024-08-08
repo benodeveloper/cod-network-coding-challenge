@@ -83,8 +83,8 @@ class ProductService
      * @param  \Closure|int|null  $total
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function listProducts($perPage = 15, $columns = ['*'], $pageName = 'page', $page = null)
+    public function listProducts($categoryId = null, $sortBy = null, $order = 'asc', $perPage = 15, $columns = ['*'], $pageName = 'page', $page = null)
     {
-        return $this->repository->paginate($perPage, $columns, $pageName, $page);
+        return $this->repository->paginate($categoryId, $sortBy, $order, $perPage, $columns, $pageName, $page);
     }
 }

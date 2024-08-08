@@ -26,6 +26,9 @@ class ProductController extends Controller
     public function index(Request $request): JsonResponse
     {
         $products = $this->service->listProducts(
+            $request->input('category_id'),
+            $request->input('sort_by'),
+            $request->input('order', 'asc'),
             $request->input('per_page', 15)
         );
 
