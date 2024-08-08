@@ -36,7 +36,7 @@
       <tbody>
         <tr v-for="product in products" :key="product.id">
           <td>
-            <img :src="product.image" alt="Product Image" width="100" />
+            <img :src="resolveImageUrl(product.image)" alt="Product Image" width="100" />
           </td>
           <td>{{ product.name }}</td>
           <td>{{ product.description }}</td>
@@ -55,6 +55,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue'
+import { resolveImageUrl } from '../helpers'
 import axios from 'axios'
 
 export default defineComponent({
@@ -69,6 +70,7 @@ export default defineComponent({
     const totalPages = ref<number>(1)
     const canPrevious = ref<boolean>(false)
     const canNext = ref<boolean>(true)
+    const placeholderImage = '/images/placeholder-image.png'
 
     const fetchCategories = async () => {
       try {
@@ -129,7 +131,8 @@ export default defineComponent({
       canNext,
       fetchProducts,
       nextPage,
-      previousPage
+      previousPage,
+      resolveImageUrl: (imageUrl: string) => resolveImageUrl(imageUrl, placeholderImage) // Use the updated helper function
     }
   }
 })
