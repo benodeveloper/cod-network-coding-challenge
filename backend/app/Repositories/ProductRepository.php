@@ -58,10 +58,19 @@ class ProductRepository
             $q->where('category_id', $categoryId);
         });
 
-        $query->when($sortBy, function($q) use($sortBy, $order) {
+        $query->when(in_array($sortBy, $this->allowedSortBy()), function($q) use($sortBy, $order) {
             $q->orderBy($sortBy, $order);
         });
 
         return $query->paginate($perPage, $columns, $pageName, $page);
+    }
+
+    /**
+     * Allowed sort by 
+     * @return array
+     */
+    private function allowedSortBy()
+    {
+        return ['name', 'price'];
     }
 }
