@@ -27,7 +27,8 @@
           </option>
         </select>
       </div>
-      <button type="submit">Create Product</button>
+      <button type="submit">Save</button>
+      <button type="button" @click="saveAndExit">Save and Exit</button>
     </form>
     <p v-if="errorMessage">{{ errorMessage }}</p>
     <p v-if="successMessage">{{ successMessage }}</p>
@@ -37,6 +38,7 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue'
 import axios from 'axios'
+import { useRouter } from 'vue-router'
 
 interface Product {
   id?: number
@@ -67,6 +69,7 @@ export default defineComponent({
     const successMessage = ref('')
 
     const categories = ref<Category[]>([])
+    const router = useRouter()
 
     // Fetch categories when component mounts
     onMounted(async () => {
@@ -96,12 +99,17 @@ export default defineComponent({
       }
     }
 
+    const saveAndExit = async () => {
+      await submitForm()
+      router.push('/')
+    }
     return {
       product,
       categories,
       errorMessage,
       successMessage,
-      submitForm
+      submitForm,
+      saveAndExit
     }
   }
 })

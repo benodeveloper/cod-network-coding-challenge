@@ -1,11 +1,13 @@
-<script setup lang="ts">
-import ProductForm from './components/ProductForm.vue'
-import ProductList from './components/ProductList.vue'
-</script>
-
 <template>
-  <main>
-    <!-- <ProductForm /> -->
-    <ProductList />
-  </main>
+  <div id="app">
+    <router-view></router-view>
+  </div>
 </template>
+
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+  name: 'App'
+})
+</script>
