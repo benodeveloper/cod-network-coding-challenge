@@ -15,8 +15,8 @@
         <input type="number" id="price" v-model="product.price" step="0.01" required />
       </div>
       <div>
-        <label for="image">Image URL:</label>
-        <input type="text" id="image" v-model="product.image" />
+        <label for="image">Image:</label>
+        <input type="file" id="image" @change="handleFileUpload" />
       </div>
       <div>
         <label for="category">Category:</label>
@@ -45,7 +45,7 @@ interface Product {
   name: string
   description: string
   price: string
-  image?: string
+  image?: any
   category_id: string
 }
 
@@ -61,7 +61,7 @@ export default defineComponent({
       name: '',
       description: '',
       price: '',
-      image: '',
+      image: null,
       category_id: ''
     })
 
@@ -81,16 +81,38 @@ export default defineComponent({
       }
     })
 
+    const handleFileUpload = (event: Event) => {
+      const input = event.target as HTMLInputElement
+      if (input.files && input.files[0]) {
+        product.value.image = input.files[0]
+      }
+    }
+
     const submitForm = async () => {
       try {
-        await axios.post<Product>('http://localhost:8000/api/products', product.value)
+        const formData = new FormData()
+        formData.append('name', product.value.name)
+        formData.append('description', product.value.description)
+        formData.append('price', product.value.price)
+        formData.append('category_id', product.value.category_id)
+
+        if (product.value.image) {
+          formData.append('image', product.value.image)
+        }
+
+        await axios.post<Product>('http://localhost:8000/api/products', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+
         successMessage.value = 'Product created successfully!'
         errorMessage.value = ''
         product.value = {
           name: '',
           description: '',
           price: '',
-          image: '',
+          image: null,
           category_id: ''
         }
       } catch (error) {
@@ -109,7 +131,8 @@ export default defineComponent({
       errorMessage,
       successMessage,
       submitForm,
-      saveAndExit
+      saveAndExit,
+      handleFileUpload
     }
   }
 })

@@ -36,7 +36,11 @@
       <tbody>
         <tr v-for="product in products" :key="product.id">
           <td>
-            <img :src="resolveImageUrl(product.image)" alt="Product Image" width="100" />
+            <img
+              :src="getFullImageUrl(resolveImageUrl(product.image))"
+              alt="Product Image"
+              width="100"
+            />
           </td>
           <td>{{ product.name }}</td>
           <td>{{ product.description }}</td>
@@ -55,7 +59,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue'
-import { resolveImageUrl } from '../helpers'
+import { getFullImageUrl, resolveImageUrl } from '../helpers'
 import axios from 'axios'
 
 export default defineComponent({
@@ -70,11 +74,12 @@ export default defineComponent({
     const totalPages = ref<number>(1)
     const canPrevious = ref<boolean>(false)
     const canNext = ref<boolean>(true)
-    const placeholderImage = '/images/placeholder-image.png'
+    const placeholderImage = 'http://localhost:5173/images/placeholder-image.png'
+    const baseUrl = 'http://localhost:8000'
 
     const fetchCategories = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/categories')
+        const response = await axios.get(`${baseUrl}/api/categories`)
         categories.value = response.data
       } catch (error) {
         console.error('Failed to fetch categories', error)
@@ -83,7 +88,7 @@ export default defineComponent({
 
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/products', {
+        const response = await axios.get(`${baseUrl}/api/products`, {
           params: {
             category_id: selectedCategory.value,
             sort_by: sortBy.value,
@@ -132,7 +137,8 @@ export default defineComponent({
       fetchProducts,
       nextPage,
       previousPage,
-      resolveImageUrl: (imageUrl: string) => resolveImageUrl(imageUrl, placeholderImage) // Use the updated helper function
+      resolveImageUrl: (imageUrl: string) => resolveImageUrl(imageUrl, placeholderImage),
+      getFullImageUrl: (url: string) => getFullImageUrl(url, `${baseUrl}/storage`)
     }
   }
 })
