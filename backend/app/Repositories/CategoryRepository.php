@@ -42,6 +42,16 @@ class CategoryRepository
     }
 
     /**
+     * Get all of the categories from the database.
+     * 
+     * @return \Illuminate\Database\Eloquent\Collection<int, static>
+     */
+    public function allCategories()
+    {
+        return Category::all();
+    }
+
+    /**
      * Paginate the given query into a simple paginator.
      *
      * @param  int|\Closure  $perPage

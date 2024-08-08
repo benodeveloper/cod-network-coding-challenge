@@ -71,6 +71,16 @@ class CategoryService
     }
 
     /**
+     * Get all of the categories from the database.
+     * 
+     * @return \Illuminate\Database\Eloquent\Collection<int, static>
+     */
+    public function allCategories()
+    {
+        return $this->repository->allCategories();
+    }
+
+    /**
      * Paginate all the categories with a give pagination params
      * 
      * @param  int|\Closure  $perPage
