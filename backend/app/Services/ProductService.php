@@ -30,7 +30,7 @@ class ProductService
             'name'        => 'required|string|max:255',
             'description' => 'nullable|string',
             'price'       => 'required|numeric|min:0',
-            'image'       => 'nullable|image|max:1024',
+            'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'category_id' => 'required|exists:categories,id',
         ]);
 

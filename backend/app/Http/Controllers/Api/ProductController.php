@@ -41,8 +41,14 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+        
 
         $this->service->validateData($data);
+        
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('images', 'public');
+            $data['image'] = $imagePath;
+        }
         
         $product = $this->service->createProduct($data);
 
